@@ -113,6 +113,7 @@
             background-color: #ddd;
             border-radius: 10px;
             margin: 10px 0;
+            position: relative;
         }
         .progress-bar-fill {
             height: 100%;
@@ -139,6 +140,14 @@
         }
         .lesson span {
             font-size: 0.9rem;
+        }
+        .percentage-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -255,14 +264,10 @@
                 progressRow.appendChild(progressBarWrapper);
 
                 // Add percentage text on progress bar
-                const percentageText = document.createElement("span");
+                const percentageText = document.createElement("div");
+                percentageText.classList.add("percentage-text");
                 percentageText.textContent = `${Math.round(progressPercentage)}%`;
-                percentageText.style.position = "absolute";
-                percentageText.style.top = "50%";
-                percentageText.style.left = "50%";
-                percentageText.style.transform = "translate(-50%, -50%)";
-                percentageText.style.color = "#fff";
-                progressRow.appendChild(percentageText);
+                progressBarWrapper.appendChild(percentageText);
 
                 // Create lesson details
                 const lessonDetails = document.createElement("div");
