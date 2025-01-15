@@ -38,6 +38,17 @@
             background-color: #d4edda;
             text-decoration: line-through;
         }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #ddd;
+            margin-top: 10px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +66,9 @@
                 <option value="mary">Mary</option>
                 <option value="peter">Peter</option>
             </select>
+        </div>
+        <div class="progress-report" id="progress-report">
+            <p>Select your name to view your progress.</p>
         </div>
         <div class="chapters" id="chapters-container">
             <p>Select your name to view chapters.</p>
@@ -85,10 +99,12 @@
             const userSelect = document.getElementById("user-select");
             const userName = userSelect.value;
             const container = document.getElementById("chapters-container");
+            const progressReport = document.getElementById("progress-report");
             const userProgress = getUserProgress();
 
             if (!userName) {
                 container.innerHTML = "<p>Select your name to view chapters.</p>";
+                progressReport.innerHTML = "<p>Select your name to view your progress.</p>";
                 return;
             }
 
@@ -105,6 +121,25 @@
                 `;
                 container.appendChild(chapterDiv);
             });
+
+            // Calculate progress and display the progress bar
+            const completedChapters = userProgress[userName].filter(completed => completed).length;
+            const progressPercentage = (completedChapters / chapters.length) * 100;
+
+            let progressColor = "#ff4d4d"; // Default red
+            if (progressPercentage >= 70) {
+                progressColor = "#4CAF50"; // Green for high progress
+            } else if (progressPercentage >= 30) {
+                progressColor = "#FFEB3B"; // Yellow for medium progress
+            }
+
+            progressReport.innerHTML = `
+                <h3>${userName.charAt(0).toUpperCase() + userName.slice(1)}'s Progress:</h3>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor};"></div>
+                </div>
+                <span>Progress: ${Math.round(progressPercentage)}%</span>
+            `;
         }
 
         function toggleCompletion(userName, index, button) {
@@ -116,6 +151,8 @@
             const isCompleted = userProgress[userName][index];
             chapterDiv.classList.toggle("completed", isCompleted);
             button.textContent = isCompleted ? "Undo" : "Mark as Complete";
+
+            loadChapters(); // Re-load chapters and progress
         }
     </script>
 </body>
