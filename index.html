@@ -208,6 +208,8 @@
                 return;
             }
 
+            const [nameEn, nameAr] = userSelect.options[userSelect.selectedIndex].text.split("|").map(name => name.trim());
+
             container.innerHTML = "";
             chapters.forEach((chapter, index) => {
                 const isCompleted = userProgress[userName][index];
@@ -234,11 +236,11 @@
             }
 
             progressReport.innerHTML = `
-                <h3>${userName.charAt(0).toUpperCase() + userName.slice(1)}'s Progress | تقدم ${userName}:</h3>
+                <h3>${nameAr} | ${nameEn}'s Progress:</h3>
                 <div class="progress-bar">
-                    <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor};"></div>
+                    <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor}; margin-top: 10px;"></div>
                 </div>
-                <span>Progress: ${Math.round(progressPercentage)}% | التقدم: ${Math.round(progressPercentage)}%</span>
+                <span style="margin-top: 5px; display: block;">Progress: ${Math.round(progressPercentage)}% | التقدم: ${Math.round(progressPercentage)}%</span>
             `;
         }
 
