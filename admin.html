@@ -29,7 +29,7 @@
             text-transform: uppercase;
         }
         .container {
-            max-width: 400px;
+            max-width: 500px; /* Increased the container width */
             background: #ffffff;
             padding: 30px 40px;
             border-radius: 15px;
@@ -87,7 +87,8 @@
             max-height: 75vh;
             overflow-y: auto;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px; /* Increased the max-width */
+            margin-left: 30px; /* Pushed to the right */
         }
         .dashboard h2 {
             color: #6a1b9a;
@@ -109,13 +110,14 @@
             text-align: center;
         }
         th, td {
-            padding: 10px;
+            padding: 15px; /* Increased padding for better readability */
             border: 1px solid #ddd;
             border-radius: 5px;
         }
         th {
             background-color: #f7c4d3;
             color: #6a1b9a;
+            word-wrap: break-word; /* Allow title text to wrap in cells */
         }
         td {
             background-color: #fff;
@@ -155,10 +157,6 @@
     <div class="dashboard" id="admin-dashboard">
         <h2>Progress Overview</h2>
         <div id="progress-container" class="table-container"></div>
-    </div>
-
-    <div class="footer">
-        <p>&copy; 2025 KDEC Admin Panel</p>
     </div>
 
     <script>
@@ -240,6 +238,19 @@
                     cell.textContent = c ? "✅" : "⏳";
                     cell.style.color = c ? "#4caf50" : "#fbc02d";
                 });
+
+                // Create a progress bar
+                const progressCell = row.insertCell();
+                const completed = userProgress[user].filter(c => c).length;
+                const total = userProgress[user].length;
+                const progressPercentage = (completed / total) * 100;
+
+                progressCell.colSpan = chapters.length;
+                progressCell.innerHTML = `
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: ${progressPercentage}%"></div>
+                    </div>
+                `;
             }
 
             container.appendChild(table);
