@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .admin-login, .admin-dashboard {
+            margin-top: 20px;
+        }
+        .admin-dashboard {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <div class="admin-login">
+        <p>Please enter your credentials:</p>
+        <label for="admin-name">Username:</label>
+        <input type="text" id="admin-name">
+        <br><br>
+        <label for="admin-password">Password:</label>
+        <input type="password" id="admin-password">
+        <br><br>
+        <button onclick="authenticate()">Login</button>
+        <p id="login-message" style="color: red;"></p>
+    </div>
+    <div class="admin-dashboard" id="admin-dashboard">
+        <h2>Progress Overview</h2>
+        <div id="progress-container"></div>
+    </div>
+    <script>
+        const adminUsername = "bassel";
+        const adminPassword = "admin2025";
+
+        const chapters = [
+            "Chapter 1: Introduction to Discipleship",
+            "Chapter 2: Understanding the Bible",
+            "Chapter 3: Faith and Prayer",
+            "Chapter 4: Sharing the Gospel"
+        ];
+
+        function getUserProgress() {
+            return JSON.parse(localStorage.getItem("userProgress")) || {
+                john: [false, false, false, false],
+                mary: [false, false, false, false],
+                peter: [false, false, false, false],
+            };
+        }
+
+        function authenticate() {
+            const name = document.getElementById("admin-name").value.toLowerCase();
+            const password = document.getElementById("admin-password").value;
+            const message = document.getElementById("login-message");
+            const dashboard = document.getElementById("admin-dashboard");
+            const progressContainer = document.getElementById("progress-container");
+
+            if (name === adminUsername && password === adminPassword) {
+                message.textContent = "";
+                dashboard.style.display = "block";
+                loadProgress(progressContainer);
+            } else {
+                message.textContent = "Invalid credentials. Please try again.";
+                dashboard.style.display = "none";
+            }
+        }
+
+        function loadProgress(container) {
+            const userProgress = getUserProgress();
+            container.innerHTML = "";
+            for (const user in userProgress) {
+                const progress = userProgress[user].map((completed, index) =>
+                    `${chapters[index]}: ${completed ? "Completed" : "Pending"}`
+                ).join("<br>");
+                const userDiv = document.createElement("div");
+                userDiv.innerHTML = `<strong>${user}</strong>:<br>${progress}<br>`;
+                container.appendChild(userDiv);
+            }
+        }
+    </script>
+</body>
+</html>
