@@ -142,12 +142,10 @@
             font-size: 0.9rem;
         }
         .percentage-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
+            color: black;
             font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -244,6 +242,11 @@
                 const total = userProgress[user].length;
                 const progressPercentage = (completed / total) * 100;
 
+                // Create percentage text above the progress bar
+                const percentageText = document.createElement("div");
+                percentageText.classList.add("percentage-text");
+                percentageText.textContent = `${Math.round(progressPercentage)}%`;
+
                 const progressBarWrapper = document.createElement("div");
                 progressBarWrapper.classList.add("progress-bar");
 
@@ -261,13 +264,8 @@
                 }
 
                 progressBarWrapper.appendChild(progressBarFill);
+                progressRow.appendChild(percentageText);
                 progressRow.appendChild(progressBarWrapper);
-
-                // Add percentage text on progress bar
-                const percentageText = document.createElement("div");
-                percentageText.classList.add("percentage-text");
-                percentageText.textContent = `${Math.round(progressPercentage)}%`;
-                progressBarWrapper.appendChild(percentageText);
 
                 // Create lesson details
                 const lessonDetails = document.createElement("div");
