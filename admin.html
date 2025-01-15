@@ -29,7 +29,7 @@
             text-transform: uppercase;
         }
         .container {
-            max-width: 500px; /* Increased the container width */
+            max-width: 500px;
             background: #ffffff;
             padding: 30px 40px;
             border-radius: 15px;
@@ -87,8 +87,8 @@
             max-height: 75vh;
             overflow-y: auto;
             width: 100%;
-            max-width: 1200px; /* Increased the max-width */
-            margin-left: 30px; /* Pushed to the right */
+            max-width: 1200px;
+            margin-left: 30px;
         }
         .dashboard h2 {
             color: #6a1b9a;
@@ -96,31 +96,16 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .table-container {
-            display: block;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 15px;
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
-        }
-        table {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 1rem;
-            text-align: center;
         }
-        th, td {
-            padding: 15px; /* Increased padding for better readability */
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        th {
-            background-color: #f7c4d3;
-            color: #6a1b9a;
-            word-wrap: break-word; /* Allow title text to wrap in cells */
-        }
-        td {
-            background-color: #fff;
+        .progress-row {
+            width: 100%;
+            margin-bottom: 30px;
         }
         .progress-bar {
             height: 12px;
@@ -144,7 +129,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="credentials-container">
         <h1>Admin Login</h1>
         <label for="admin-name">Username:</label>
         <input type="text" id="admin-name" placeholder="Enter username">
@@ -156,7 +141,7 @@
 
     <div class="dashboard" id="admin-dashboard">
         <h2>Progress Overview</h2>
-        <div id="progress-container" class="table-container"></div>
+        <div id="progress-container" class="progress-container"></div>
     </div>
 
     <script>
@@ -204,56 +189,58 @@
             const name = document.getElementById("admin-name").value.toLowerCase();
             const password = document.getElementById("admin-password").value;
             const message = document.getElementById("login-message");
+            const credentialsContainer = document.getElementById("credentials-container");
             const dashboard = document.getElementById("admin-dashboard");
-            const progressContainer = document.getElementById("progress-container");
 
             if (name === adminUsername && password === adminPassword) {
-                message.textContent = "";
-                dashboard.style.display = "block";
-                loadProgress(progressContainer);
+                credentialsContainer.style.display = "none"; // Hide credentials form
+                dashboard.style.display = "block"; // Show dashboard
+                loadProgress();
             } else {
                 message.textContent = "Invalid credentials | بيانات غير صحيحة. حاول مرة أخرى.";
-                dashboard.style.display = "none";
             }
         }
 
-        function loadProgress(container) {
+        function loadProgress() {
             const userProgress = getUserProgress();
-            container.innerHTML = "";
+            const progressContainer = document.getElementById("progress-container");
 
-            // Create table structure
-            const table = document.createElement("table");
-            const header = table.createTHead();
-            const headerRow = header.insertRow();
-            headerRow.innerHTML = "<th>User</th>" + chapters.map(chapter => `<th>${chapter}</th>`).join("");
-
-            const body = table.createTBody();
+            progressContainer.innerHTML = "";
 
             for (const user in userProgress) {
-                const row = body.insertRow();
-                row.insertCell(0).textContent = user.charAt(0).toUpperCase() + user.slice(1);
-                
-                userProgress[user].forEach(c => {
-                    const cell = row.insertCell();
-                    cell.textContent = c ? "✅" : "⏳";
-                    cell.style.color = c ? "#4caf50" : "#fbc02d";
-                });
+                const progressRow = document.createElement("div");
+                progressRow.classList.add("progress-row");
 
-                // Create a progress bar
-                const progressCell = row.insertCell();
+                const progressLabel = document.createElement("h3");
+                progressLabel.textContent = user.charAt(0).toUpperCase() + user.slice(1);
+                progressRow.appendChild(progressLabel);
+
+                // Create progress bar
                 const completed = userProgress[user].filter(c => c).length;
                 const total = userProgress[user].length;
                 const progressPercentage = (completed / total) * 100;
 
-                progressCell.colSpan = chapters.length;
-                progressCell.innerHTML = `
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill" style="width: ${progressPercentage}%"></div>
-                    </div>
-                `;
-            }
+                const progressBarWrapper = document.createElement("div");
+                progressBarWrapper.classList.add("progress-bar");
 
-            container.appendChild(table);
+                const progressBarFill = document.createElement("div");
+                progressBarFill.classList.add("progress-bar-fill");
+                progressBarFill.style.width = `${progressPercentage}%`;
+
+                // Color coding based on progress
+                if (progressPercentage === 100) {
+                    progressBarFill.style.backgroundColor = "#4caf50"; // Green for complete
+                } else if (progressPercentage > 0) {
+                    progressBarFill.style.backgroundColor = "#fbc02d"; // Yellow for in-progress
+                } else {
+                    progressBarFill.style.backgroundColor = "#ff5252"; // Red for not started
+                }
+
+                progressBarWrapper.appendChild(progressBarFill);
+                progressRow.appendChild(progressBarWrapper);
+
+                progressContainer.appendChild(progressRow);
+            }
         }
     </script>
 </body>
