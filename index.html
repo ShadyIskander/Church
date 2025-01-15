@@ -187,7 +187,29 @@
             "١. مبادئ التلمذة الدرس الاول",
             "٢. مبادئ التلمذة الدرس الثاني",
             "٣. شخصية الله الدرس الاول",
-            // Add more chapters as needed
+            "٤. شخصية الله الدرس الثاني",
+            "٥. شخصية الله الدرس الثالث",
+            "٦. شخصية الله الدرس الرابع",
+            "٧. شخصية الله الدرس الخامس",
+            "٨. أزمة الأبوة وتأثيرها",
+            "٩. ترويض العادات اليومية",
+            "١٠. الملل",
+            "١١. تيموثاوس الأولى الدرس الاول",
+            "١٢. تيموثاوس الأولى الدرس الثاني",
+            "١٣. تيموثاوس الأولى الدرس الثالث",
+            "١٤. تيموثاوس الأولى الدرس الرابع",
+            "١٥. تيموثاوس الأولى الدرس الخامس",
+            "١٦. تيموثاوس الأولى الدرس السادس",
+            "١٧. سلطان الله ومسؤولية الإنسان الدرس الاول",
+            "١٨. سلطان الله ومسؤولية الإنسان الدرس الثاني",
+            "١٩. سلطان الله ومسؤولية الإنسان الدرس الثالث",
+            "٢٠. سلطان الله ومسؤولية الإنسان الدرس الرابع",
+            "٢١. ليه مش عارف اتغير",
+            "٢٢. المؤمن الحقيقي والمؤمن المزيف",
+            "٢٣. تيموثاوس الثانية الدرس الاول",
+            "٢٤. تيموثاوس الثانية الدرس الثاني",
+            "٢٥. تيموثاوس الثانية الدرس الثالث",
+            "٢٦. تيموثاوس الثانية الدرس الرابع"
         ];
 
         function getUserProgress() {
@@ -234,10 +256,17 @@
             const completedChapters = userProgress[userName].filter(Boolean).length;
             const progressPercentage = (completedChapters / chapters.length) * 100;
 
+            let progressColor = "#ff4d4d"; // Default red
+            if (progressPercentage >= 70) {
+                progressColor = "#4caf50"; // Green for high progress
+            } else if (progressPercentage >= 30) {
+                progressColor = "#ffeb3b"; // Yellow for medium progress
+            }
+
             progressReport.innerHTML = `
                 <h3>${nameAr} | ${nameEn}'s Progress:</h3>
                 <div class="progress-bar">
-                    <div class="progress-bar-fill" style="width: ${progressPercentage}%"></div>
+                    <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor};"></div>
                 </div>
                 <span>Progress: ${Math.round(progressPercentage)}% | التقدم: ${Math.round(progressPercentage)}%</span>
             `;
