@@ -89,6 +89,17 @@
             top: 0;
             color: #0056b3;
         }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #ddd;
+            margin-top: 10px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -119,9 +130,9 @@
 
         function getUserProgress() {
             return JSON.parse(localStorage.getItem("userProgress")) || {
-                john: [false, false, false, false],
-                mary: [false, false, false, false],
-                peter: [false, false, false, false],
+                john: [true, false, true, false],
+                mary: [false, true, false, true],
+                peter: [true, true, true, true],
             };
         }
 
@@ -148,10 +159,29 @@
             for (const user in userProgress) {
                 const userDiv = document.createElement("div");
                 userDiv.className = "progress-card";
-                userDiv.innerHTML = `<strong>${user.charAt(0).toUpperCase() + user.slice(1)}</strong>` +
-                    userProgress[user].map((completed, index) =>
+                
+                // Calculate the percentage of completed chapters
+                const completedChapters = userProgress[user].filter(completed => completed).length;
+                const progressPercentage = (completedChapters / chapters.length) * 100;
+                
+                // Determine the color based on the percentage
+                let progressColor = "#ff4d4d"; // Default red
+                if (progressPercentage >= 70) {
+                    progressColor = "#4CAF50"; // Green for high progress
+                } else if (progressPercentage >= 30) {
+                    progressColor = "#FFEB3B"; // Yellow for medium progress
+                }
+
+                userDiv.innerHTML = `
+                    <strong>${user.charAt(0).toUpperCase() + user.slice(1)}</strong>
+                    ${userProgress[user].map((completed, index) =>
                         `<span>${chapters[index]}: ${completed ? "✅ Completed" : "⏳ Pending"}</span>`
-                    ).join("");
+                    ).join("")}
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor};"></div>
+                    </div>
+                    <span>Progress: ${Math.round(progressPercentage)}%</span>
+                `;
                 container.appendChild(userDiv);
             }
         }
