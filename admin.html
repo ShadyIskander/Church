@@ -99,7 +99,7 @@
         .progress-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             margin-top: 20px;
             width: 100%;
         }
@@ -124,6 +124,21 @@
             margin-top: 20px;
             font-size: 1rem;
             color: #6a1b9a;
+        }
+        .lesson-details {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        .lesson {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .lesson span {
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -215,7 +230,7 @@
                 progressLabel.textContent = user.charAt(0).toUpperCase() + user.slice(1);
                 progressRow.appendChild(progressLabel);
 
-                // Create progress bar
+                // Create progress bar and lesson details
                 const completed = userProgress[user].filter(c => c).length;
                 const total = userProgress[user].length;
                 const progressPercentage = (completed / total) * 100;
@@ -239,6 +254,31 @@
                 progressBarWrapper.appendChild(progressBarFill);
                 progressRow.appendChild(progressBarWrapper);
 
+                // Add percentage text on progress bar
+                const percentageText = document.createElement("span");
+                percentageText.textContent = `${Math.round(progressPercentage)}%`;
+                percentageText.style.position = "absolute";
+                percentageText.style.top = "50%";
+                percentageText.style.left = "50%";
+                percentageText.style.transform = "translate(-50%, -50%)";
+                percentageText.style.color = "#fff";
+                progressRow.appendChild(percentageText);
+
+                // Create lesson details
+                const lessonDetails = document.createElement("div");
+                lessonDetails.classList.add("lesson-details");
+
+                userProgress[user].forEach((completed, index) => {
+                    const lesson = document.createElement("div");
+                    lesson.classList.add("lesson");
+                    lesson.innerHTML = `
+                        <span>${chapters[index]}</span>
+                        <span>${completed ? "✅ Completed" : "❌ Not Completed"}</span>
+                    `;
+                    lessonDetails.appendChild(lesson);
+                });
+
+                progressRow.appendChild(lessonDetails);
                 progressContainer.appendChild(progressRow);
             }
         }
