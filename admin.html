@@ -125,17 +125,39 @@
         const adminPassword = "1234";
 
         const chapters = [
-            "Chapter 1: Introduction to Discipleship | الفصل ١: مقدمة في التلمذة",
-            "Chapter 2: Understanding the Bible | الفصل ٢: فهم الكتاب المقدس",
-            "Chapter 3: Faith and Prayer | الفصل ٣: الإيمان والصلاة",
-            "Chapter 4: Sharing the Gospel | الفصل ٤: مشاركة الإنجيل"
+            "١. مبادئ التلمذة الدرس الاول",
+            "٢. مبادئ التلمذة الدرس الثاني",
+            "٣. شخصية الله الدرس الاول",
+            "٤. شخصية الله الدرس الثاني",
+            "٥. شخصية الله الدرس الثالث",
+            "٦. شخصية الله الدرس الرابع",
+            "٧. شخصية الله الدرس الخامس",
+            "٨. أزمة الابوة وتأثيرها على فهمنا لله كأب سماوي",
+            "٩. ترويض العادات اليومية",
+            "١٠. الملل",
+            "١١. تيموثاوس الأولى الدرس الاول",
+            "١٢. تيموثاوس الأولى الدرس الثاني",
+            "١٣. تيموثاوس الأولى الدرس الثالث",
+            "١٤. تيموثاوس الأولى الدرس الرابع",
+            "١٥. تيموثاوس الأولى الدرس الخامس",
+            "١٦. تيموثاوس الأولى الدرس السادس",
+            "١٧. سلطان الله ومسؤولية الإنسان الدرس الاول",
+            "١٨. سلطان الله ومسؤولية الإنسان الدرس الثاني",
+            "١٩. سلطان الله ومسؤولية الإنسان الدرس الثالث",
+            "٢٠. سلطان الله ومسؤولية الإنسان الدرس الرابع",
+            "٢١. ليه مش عارف اتغير",
+            "٢٢. المؤمن الحقيقي والمؤمن المزيف",
+            "٢٣. تيموثاوس الثانية الدرس الاول",
+            "٢٤. تيموثاوس الثانية الدرس الثاني",
+            "٢٥. تيموثاوس الثانية الدرس الثالث",
+            "٢٦. تيموثاوس الثانية الدرس الرابع"
         ];
 
         function getUserProgress() {
             return JSON.parse(localStorage.getItem("userProgress")) || {
-                john: [true, false, true, false],
-                mary: [false, true, false, true],
-                peter: [true, true, true, true],
+                john: [true, false, true, false, false, true, true, false, false, true, false, true, false, false, false, false, false, true, false, true, false, true, true, true, false, false],
+                mary: [false, true, false, true, true, false, true, true, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false],
+                peter: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
             };
         }
 
