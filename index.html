@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discipleship Groups</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .cover {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .dropdown {
+            margin: 20px 0;
+        }
+        .chapters {
+            margin-top: 20px;
+        }
+        .chapter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .chapter.completed {
+            background-color: #d4edda;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Welcome to Discipleship Groups</h1>
+        <p>Track your progress and grow together in faith!</p>
+        <p><a href="admin.html">Go to Admin Page</a></p>
+    </div>
+    <div class="main-content">
+        <div class="dropdown">
+            <label for="user-select">Select Your Name:</label>
+            <select id="user-select" onchange="loadChapters()">
+                <option value="">-- Select --</option>
+                <option value="john">John</option>
+                <option value="mary">Mary</option>
+                <option value="peter">Peter</option>
+            </select>
+        </div>
+        <div class="chapters" id="chapters-container">
+            <p>Select your name to view chapters.</p>
+        </div>
+    </div>
+
+    <script>
+        const chapters = [
+            "Chapter 1: Introduction to Discipleship",
+            "Chapter 2: Understanding the Bible",
+            "Chapter 3: Faith and Prayer",
+            "Chapter 4: Sharing the Gospel"
+        ];
+
+        function getUserProgress() {
+            return JSON.parse(localStorage.getItem("userProgress")) || {
+                john: [false, false, false, false],
+                mary: [false, false, false, false],
+                peter: [false, false, false, false],
+            };
+        }
+
+        function saveUserProgress(progress) {
+            localStorage.setItem("userProgress", JSON.stringify(progress));
+        }
+
+        function loadChapters() {
+            const userSelect = document.getElementById("user-select");
+            const userName = userSelect.value;
+            const container = document.getElementById("chapters-container");
+            const userProgress = getUserProgress();
+
+            if (!userName) {
+                container.innerHTML = "<p>Select your name to view chapters.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            chapters.forEach((chapter, index) => {
+                const isCompleted = userProgress[userName][index];
+                const chapterDiv = document.createElement("div");
+                chapterDiv.className = `chapter ${isCompleted ? "completed" : ""}`;
+                chapterDiv.innerHTML = `
+                    <span>${chapter}</span>
+                    <button onclick="toggleCompletion('${userName}', ${index}, this)">
+                        ${isCompleted ? "Undo" : "Mark as Complete"}
+                    </button>
+                `;
+                container.appendChild(chapterDiv);
+            });
+        }
+
+        function toggleCompletion(userName, index, button) {
+            const userProgress = getUserProgress();
+            userProgress[userName][index] = !userProgress[userName][index];
+            saveUserProgress(userProgress);
+
+            const chapterDiv = button.parentElement;
+            const isCompleted = userProgress[userName][index];
+            chapterDiv.classList.toggle("completed", isCompleted);
+            button.textContent = isCompleted ? "Undo" : "Mark as Complete";
+        }
+    </script>
+</body>
+</html>
