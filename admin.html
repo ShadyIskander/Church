@@ -18,6 +18,7 @@
             justify-content: center;
             align-items: center;
             color: #333;
+            overflow: hidden;
         }
         h1 {
             font-family: 'Georgia', serif;
@@ -83,6 +84,10 @@
             border-radius: 15px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             margin-top: 30px;
+            max-height: 75vh;
+            overflow-y: auto;
+            width: 100%;
+            max-width: 1000px;
         }
         .dashboard h2 {
             color: #6a1b9a;
@@ -90,36 +95,30 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .progress-container {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: 1fr 1fr;
-            justify-items: center;
-        }
-        .progress-card {
-            background: #f3e5f5;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 350px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .progress-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        .progress-card strong {
+        .table-container {
             display: block;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 15px;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            text-align: center;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        th {
+            background-color: #f7c4d3;
             color: #6a1b9a;
         }
-        .progress-card span {
-            font-size: 1.1rem;
-            color: #333;
-            display: block;
-            margin-bottom: 5px;
+        td {
+            background-color: #fff;
         }
         .progress-bar {
             height: 12px;
@@ -155,11 +154,11 @@
 
     <div class="dashboard" id="admin-dashboard">
         <h2>Progress Overview</h2>
-        <div id="progress-container" class="progress-container"></div>
+        <div id="progress-container" class="table-container"></div>
     </div>
 
     <div class="footer">
-        <p>&copy; 2025 Church Admin Panel | All Rights Reserved</p>
+        <p>&copy; 2025 KDEC Admin Panel</p>
     </div>
 
     <script>
@@ -223,27 +222,27 @@
         function loadProgress(container) {
             const userProgress = getUserProgress();
             container.innerHTML = "";
+
+            // Create table structure
+            const table = document.createElement("table");
+            const header = table.createTHead();
+            const headerRow = header.insertRow();
+            headerRow.innerHTML = "<th>User</th>" + chapters.map(chapter => `<th>${chapter}</th>`).join("");
+
+            const body = table.createTBody();
+
             for (const user in userProgress) {
-                const userDiv = document.createElement("div");
-                userDiv.className = "progress-card";
-
-                const completedChapters = userProgress[user].filter(c => c).length;
-                const progressPercentage = (completedChapters / chapters.length) * 100;
-
-                let progressColor = "#ff4d4d";
-                if (progressPercentage >= 70) progressColor = "#4CAF50";
-                else if (progressPercentage >= 30) progressColor = "#FFEB3B";
-
-                userDiv.innerHTML = `
-                    <strong>${user.charAt(0).toUpperCase() + user.slice(1)}</strong>
-                    ${userProgress[user].map((c, i) => `<span>${chapters[i]}: ${c ? "✅" : "⏳"}</span>`).join("")}
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill" style="width: ${progressPercentage}%; background-color: ${progressColor};"></div>
-                    </div>
-                    <span>Progress: ${Math.round(progressPercentage)}% | التقدم: ${Math.round(progressPercentage)}%</span>
-                `;
-                container.appendChild(userDiv);
+                const row = body.insertRow();
+                row.insertCell(0).textContent = user.charAt(0).toUpperCase() + user.slice(1);
+                
+                userProgress[user].forEach(c => {
+                    const cell = row.insertCell();
+                    cell.textContent = c ? "✅" : "⏳";
+                    cell.style.color = c ? "#4caf50" : "#fbc02d";
+                });
             }
+
+            container.appendChild(table);
         }
     </script>
 </body>
